@@ -111,6 +111,29 @@ The `/data` endpoint provides a JSON API for the public dashboard to fetch real-
 **Usage:**
 - The dashboard uses this endpoint to periodically request updates and refresh the displayed game data without needing a full page reload.
 
+### vMix API Integration
+
+The application pulls the latest game scores from the vMix API using the following code block in `app.py`
+```python
+for title in titles:
+    if title.get('title') == "Scoreboard":  # Replace with your actual title name
+        team1_score_element = title.find(".//text[@name='Team1Score.Text']")
+        team2_score_element = title.find(".//text[@name='Team2Score.Text']")
+        if team1_score_element is not None and team2_score_element is not None:
+            team1_score = team1_score_element.text
+            team2_score = team2_score_element.text
+            return int(team1_score), int(team2_score)
+```
+
+If you are using text holders other than `Team1Score.Text` or `Team2Score.Text` please be ensure to updae this here.
+```python
+        team1_score_element = title.find(".//text[@name='Team1Score.Text']")
+        team2_score_element = title.find(".//text[@name='Team2Score.Text']")
+```
+If your tital in your vMix package is not `"Scoreboard"` please also update this here 
+```python
+if title.get('title') == "Scoreboard":
+```
 ## Setup
 
 **Clone the Repository:**
