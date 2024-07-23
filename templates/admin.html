@@ -1,0 +1,272 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" type="image/png">
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+
+        .navbar {
+            background-color: #001F3F;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #FFD700 !important;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #FFFFFF !important;
+            }
+
+        .form-control {
+            border: 2px solid #001F3F;
+        }
+
+        .btn-primary {
+            background-color: #001F3F;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #003366;
+            }
+
+        .btn-danger {
+            background-color: #FFDF00;
+            border: none;
+        }
+
+            .btn-danger:hover {
+                background-color: #FFD700;
+            }
+
+        .message-box {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #FFD700;
+            color: #000000;
+            border: 1px solid #FFD700;
+            border-radius: 4px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                background-color: #FFD700;
+            }
+
+            50% {
+                background-color: #FFDF00;
+            }
+
+            100% {
+                background-color: #FFD700;
+            }
+        }
+
+        textarea {
+            min-height: 50px; /* Shorter height */
+            width: 100%; /* Full width */
+            overflow-y: hidden;
+        }
+
+        .events-timeline {
+            margin-top: 20px;
+        }
+
+        .event-card {
+            border: 2px solid #001F3F;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .event-card-header {
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .event-card-body {
+            color: #000000;
+        }
+
+        .form-inline .form-control {
+            flex: 1; /* Allow textarea to take available width */
+        }
+
+        .form-inline .form-group {
+            width: 80%; /* Set a fixed width for better alignment */
+        }
+
+        .form-inline button {
+            width: 18%; /* Set a fixed width for the button */
+        }
+
+        .collapse-button {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" alt="Team Logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Admin Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.manchesterstorm.com/" target="_blank">Manchester Storm Website</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.eliteleague.co.uk/" target="_blank">EIHL Website</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://hub.eihl.tv/users/sign_in" target="_blank">EIHL TV Hub</a>
+                </li>
+            </ul>
+            <span class="navbar-text ml-auto clock">
+                <span id="currentStage">{{ state.current_stage.replace('_', ' ') }}</span> -
+                <span id="datetime"></span>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <br/>
+        <h3>Admin Panel</h3>
+
+        {% if state.is_logged_in %}
+        <form method="POST">
+            <div class="form-group">
+                <label for="stage">Run of Show:</label>
+                <select name="stage" id="stage" class="form-control">
+                    <option value="Pre Show" {% if state.current_stage == 'Pre Show' %}selected{% endif %}>Pre Show</option>
+                    <option value="1st Period" {% if state.current_stage == '1st Period' %}selected{% endif %}>1st Period</option>
+                    <option value="1st Intermission" {% if state.current_stage == '1st Intermission' %}selected{% endif %}>1st Intermission</option>
+                    <option value="2nd Period" {% if state.current_stage == '2nd Period' %}selected{% endif %}>2nd Period</option>
+                    <option value="2nd Intermission" {% if state.current_stage == '2nd Intermission' %}selected{% endif %}>2nd Intermission</option>
+                    <option value="3rd Period" {% if state.current_stage == '3rd Period' %}selected{% endif %}>3rd Period</option>
+                    <option value="End Of Game" {% if state.current_stage == 'End Of Game' %}selected{% endif %}>End Of Game</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="home_team">Home Team:</label>
+                <select name="home_team" id="home_team" class="form-control">
+                    <option value="Manchester Storm" data-logo="https://www.eliteleague.co.uk/photo/team/team_11.png" {% if state.home_team == 'Manchester Storm' %}selected{% endif %}>Manchester Storm</option>
+                    <option value="Belfast Giants" data-logo="https://www.eliteleague.co.uk/photo/team/team_4.png" {% if state.home_team == 'Belfast Giants' %}selected{% endif %}>Belfast Giants</option>
+                    <option value="Cardiff Devils" data-logo="https://www.eliteleague.co.uk/photo/team/team_5.png" {% if state.home_team == 'Cardiff Devils' %}selected{% endif %}>Cardiff Devils</option>
+                    <option value="Coventry Blaze" data-logo="https://www.eliteleague.co.uk/photo/team/team_6.png" {% if state.home_team == 'Coventry Blaze' %}selected{% endif %}>Coventry Blaze</option>
+                    <option value="Dundee Stars" data-logo="https://www.eliteleague.co.uk/photo/team/team_7.png" {% if state.home_team == 'Dundee Stars' %}selected{% endif %}>Dundee Stars</option>
+                    <option value="Fife Flyers" data-logo="https://www.eliteleague.co.uk/photo/team/team_8.png" {% if state.home_team == 'Fife Flyers' %}selected{% endif %}>Fife Flyers</option>
+                    <option value="Glasgow Clan" data-logo="https://www.eliteleague.co.uk/photo/team/team_9.png" {% if state.home_team == 'Glasgow Clan' %}selected{% endif %}>Glasgow Clan</option>
+                    <option value="Guildford Flames" data-logo="https://www.eliteleague.co.uk/photo/team/team_10.png" {% if state.home_team == 'Guildford Flames' %}selected{% endif %}>Guildford Flames</option>
+                    <option value="Nottingham Panthers" data-logo="https://www.eliteleague.co.uk/photo/team/team_12.png" {% if state.home_team == 'Nottingham Panthers' %}selected{% endif %}>Nottingham Panthers</option>
+                    <option value="Sheffield Steelers" data-logo="https://www.eliteleague.co.uk/photo/team/team_13.png" {% if state.home_team == 'Sheffield Steelers' %}selected{% endif %}>Sheffield Steelers</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="away_team">Away Team:</label>
+                <select name="away_team" id="away_team" class="form-control">
+                    <option value="Manchester Storm" data-logo="https://www.eliteleague.co.uk/photo/team/team_11.png" {% if state.away_team == 'Manchester Storm' %}selected{% endif %}>Manchester Storm</option>
+                    <option value="Belfast Giants" data-logo="https://www.eliteleague.co.uk/photo/team/team_4.png" {% if state.away_team == 'Belfast Giants' %}selected{% endif %}>Belfast Giants</option>
+                    <option value="Cardiff Devils" data-logo="https://www.eliteleague.co.uk/photo/team/team_5.png" {% if state.away_team == 'Cardiff Devils' %}selected{% endif %}>Cardiff Devils</option>
+                    <option value="Coventry Blaze" data-logo="https://www.eliteleague.co.uk/photo/team/team_6.png" {% if state.away_team == 'Coventry Blaze' %}selected{% endif %}>Coventry Blaze</option>
+                    <option value="Dundee Stars" data-logo="https://www.eliteleague.co.uk/photo/team/team_7.png" {% if state.away_team == 'Dundee Stars' %}selected{% endif %}>Dundee Stars</option>
+                    <option value="Fife Flyers" data-logo="https://www.eliteleague.co.uk/photo/team/team_8.png" {% if state.away_team == 'Fife Flyers' %}selected{% endif %}>Fife Flyers</option>
+                    <option value="Glasgow Clan" data-logo="https://www.eliteleague.co.uk/photo/team/team_9.png" {% if state.away_team == 'Glasgow Clan' %}selected{% endif %}>Glasgow Clan</option>
+                    <option value="Guildford Flames" data-logo="https://www.eliteleague.co.uk/photo/team/team_10.png" {% if state.away_team == 'Guildford Flames' %}selected{% endif %}>Guildford Flames</option>
+                    <option value="Nottingham Panthers" data-logo="https://www.eliteleague.co.uk/photo/team/team_12.png" {% if state.away_team == 'Nottingham Panthers' %}selected{% endif %}>Nottingham Panthers</option>
+                    <option value="Sheffield Steelers" data-logo="https://www.eliteleague.co.uk/photo/team/team_13.png" {% if state.away_team == 'Sheffield Steelers' %}selected{% endif %}>Sheffield Steelers</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea name="message" id="message" class="form-control">{{ state.message }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="new_event">Add New Event:</label>
+                <textarea name="new_event" id="new_event" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="timestamp">Timestamp:</label>
+                <input type="text" name="timestamp" id="timestamp" class="form-control" placeholder="HH:MM">
+            </div>
+
+            <button type="submit" name="update" class="btn btn-primary">Update</button>
+            <button type="submit" name="clear" class="btn btn-danger">Clear Message</button>
+        </form>
+
+        <button class="btn btn-secondary collapse-button mt-3" type="button" data-toggle="collapse" data-target="#eventsTimeline" aria-expanded="false" aria-controls="eventsTimeline">
+            Toggle Events Timeline
+        </button>
+
+        <div id="eventsTimeline" class="collapse">
+            <h3>Events Timeline</h3>
+            <div class="list-group">
+                {% for event in state.events %}
+                <div class="list-group-item event-card">
+                    <form method="POST" class="form-inline">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" class="form-control" name="event_timestamp" value="{{ event.timestamp }}" placeholder="HH:MM">
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <textarea class="form-control" name="event_content" style="width: 80%; height: 50px;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">{{ event.content }}</textarea>
+                        </div>
+                        <button type="submit" name="edit_event" value="{{ loop.index0 }}" class="btn btn-primary mb-2">Edit</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" class="form-control">
+            </div>
+            <button type="submit" name="login" class="btn btn-primary">Login</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('datetime').innerText = now.toLocaleDateString('en-US', options).replace(' at ', ' - ');
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" type="image/png">
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+
+        .navbar {
+            background-color: #001F3F;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #FFD700 !important;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #FFFFFF !important;
+            }
+
+        .clock {
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .game-title-box {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            border: 2px solid #001F3F;
+            background-color: #001F3F;
+            color: #FFD700;
+            border-radius: 10px;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+        }
+
+            .team img {
+                height: 50px;
+                margin-right: 10px;
+            }
+
+        .scoreboard {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .team-score {
+            margin: 0 20px;
+            width: 100px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .vs {
+            font-size: 1.5em;
+            margin: 0 20px;
+        }
+
+        #messageBox {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #FFD700;
+            color: #000000;
+            border: 1px solid #FFD700;
+            border-radius: 4px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                background-color: #FFD700;
+            }
+
+            50% {
+                background-color: #FFDF00;
+            }
+
+            100% {
+                background-color: #FFD700;
+            }
+        }
+
+        .events-timeline {
+            margin-top: 20px;
+        }
+
+        .event-card {
+            border: 2px solid #001F3F;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .event-card-header {
+            font-weight: bold;
+            color: #001F3F;
+        }
+
+        .event-card-body {
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" alt="Team Logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Admin Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.manchesterstorm.com/" target="_blank">Manchester Storm Website</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.eliteleague.co.uk/" target="_blank">EIHL Website</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://hub.eihl.tv/users/sign_in" target="_blank">EIHL TV Hub</a>
+                </li>
+            </ul>
+            <span class="navbar-text ml-auto clock">
+                <span id="currentStage">{{ state.current_stage.replace('_', ' ') }}</span> -
+                <span id="datetime"></span>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="messageBox" class="row" style="display: {% if state.is_message_sent %}block{% else %}none{% endif %};">
+            <div class="col">
+                <h3>Message:</h3>
+                <p id="message">{{ state.message }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="game-title-box" id="gameTitle">
+                    <div class="team">
+                        <img src="{{ state.home_team_logo }}" alt="{{ state.home_team }}">
+                        <span>{{ state.home_team }} [<span id="team1Score">{{ state.team1_score }}</span>]</span>
+                    </div>
+                    <div class="vs">vs</div>
+                    <div class="team">
+                        <img src="{{ state.away_team_logo }}" alt="{{ state.away_team }}">
+                        <span>[<span id="team2Score">{{ state.team2_score }}</span>] {{ state.away_team }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="events-timeline">
+            <h3>Events Timeline</h3>
+            <div class="list-group">
+                {% for event in state.events %}
+                <div class="list-group-item event-card">
+                    <div class="event-card-header">{{ event.timestamp }}</div>
+                    <div class="event-card-body">{{ event.content }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('datetime').innerText = now.toLocaleDateString('en-US', options).replace(' at ', ' - ');
+        }
+
+        function fetchData() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('gameTitle').innerHTML = `
+                            <div class="team">
+                                <img src="${data.home_team_logo}" alt="${data.home_team}">
+                                <span>${data.home_team} [<span id="team1Score">${data.team1_score}</span>]</span>
+                            </div>
+                            <div class="vs">vs</div>
+                            <div class="team">
+                                <img src="${data.away_team_logo}" alt="${data.away_team}">
+                                <span>[<span id="team2Score">${data.team2_score}</span>] ${data.away_team}</span>
+                            </div>
+                        `;
+                    document.getElementById('currentStage').innerText = data.current_stage.replace('_', ' ');
+                    document.getElementById('team1Score').innerText = data.team1_score;
+                    document.getElementById('team2Score').innerText = data.team2_score;
+                    if (data.is_message_sent) {
+                        document.getElementById('messageBox').style.display = 'block';
+                        document.getElementById('message').innerText = data.message;
+                    } else {
+                        document.getElementById('messageBox').style.display = 'none';
+                    }
+
+                    const eventsList = data.events.map(event => `
+                            <div class="list-group-item event-card">
+                                <div class="event-card-header">${event.timestamp}</div>
+                                <div class="event-card-body">${event.content}</div>
+                            </div>
+                        `).join('');
+                    document.querySelector('.events-timeline .list-group').innerHTML = eventsList;
+                });
+        }
+
+        setInterval(updateClock, 1000);
+        setInterval(fetchData, 5000);
+        updateClock();
+        fetchData();
+    </script>
+</body>
+</html>
