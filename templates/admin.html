@@ -24,9 +24,9 @@
             color: #FFD700 !important;
         }
 
-            .navbar-nav .nav-link:hover {
-                color: #FFFFFF !important;
-            }
+        .navbar-nav .nav-link:hover {
+            color: #FFFFFF !important;
+        }
 
         .form-control {
             border: 2px solid #001F3F;
@@ -37,18 +37,18 @@
             border: none;
         }
 
-            .btn-primary:hover {
-                background-color: #003366;
-            }
+        .btn-primary:hover {
+            background-color: #003366;
+        }
 
         .btn-danger {
             background-color: #FFDF00;
             border: none;
         }
 
-            .btn-danger:hover {
-                background-color: #FFD700;
-            }
+        .btn-danger:hover {
+            background-color: #FFD700;
+        }
 
         .message-box {
             margin-top: 20px;
@@ -79,42 +79,6 @@
             width: 100%; /* Full width */
             overflow-y: hidden;
         }
-
-        .events-timeline {
-            margin-top: 20px;
-        }
-
-        .event-card {
-            border: 2px solid #001F3F;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-
-        .event-card-header {
-            font-weight: bold;
-            color: #FFD700;
-        }
-
-        .event-card-body {
-            color: #000000;
-        }
-
-        .form-inline .form-control {
-            flex: 1; /* Allow textarea to take available width */
-        }
-
-        .form-inline .form-group {
-            width: 80%; /* Set a fixed width for better alignment */
-        }
-
-        .form-inline button {
-            width: 18%; /* Set a fixed width for the button */
-        }
-
-        .collapse-button {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
@@ -130,6 +94,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin">Admin Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/events">Events Management</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://www.manchesterstorm.com/" target="_blank">Manchester Storm Website</a>
@@ -204,42 +171,9 @@
                 <textarea name="message" id="message" class="form-control">{{ state.message }}</textarea>
             </div>
 
-            <div class="form-group">
-                <label for="new_event">Add New Event:</label>
-                <textarea name="new_event" id="new_event" class="form-control"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="timestamp">Timestamp:</label>
-                <input type="text" name="timestamp" id="timestamp" class="form-control" placeholder="HH:MM">
-            </div>
-
             <button type="submit" name="update" class="btn btn-primary">Update</button>
             <button type="submit" name="clear" class="btn btn-danger">Clear Message</button>
         </form>
-
-        <button class="btn btn-secondary collapse-button mt-3" type="button" data-toggle="collapse" data-target="#eventsTimeline" aria-expanded="false" aria-controls="eventsTimeline">
-            Toggle Events Timeline
-        </button>
-
-        <div id="eventsTimeline" class="collapse">
-            <h3>Events Timeline</h3>
-            <div class="list-group">
-                {% for event in state.events %}
-                <div class="list-group-item event-card">
-                    <form method="POST" class="form-inline">
-                        <div class="form-group mx-sm-3 mb-2">
-                            <input type="text" class="form-control" name="event_timestamp" value="{{ event.timestamp }}" placeholder="HH:MM">
-                        </div>
-                        <div class="form-group mx-sm-3 mb-2">
-                            <textarea class="form-control" name="event_content" style="width: 80%; height: 50px;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">{{ event.content }}</textarea>
-                        </div>
-                        <button type="submit" name="edit_event" value="{{ loop.index0 }}" class="btn btn-primary mb-2">Edit</button>
-                    </form>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
         {% else %}
         <form method="POST">
             <div class="form-group">

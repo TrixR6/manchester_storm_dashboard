@@ -55,61 +55,25 @@ The `dashboard.html` file is the public-facing template that displays real-time 
 
 ### admin.html
 
-The `admin.html` file provides the interface for administrators to manage the game state and events.
+The `admin.html` file provides the interface for administrators to manage the game state and send messages.
 
 **Key Features:**
 - **Game Management:**
   - Allows updating the current stage, home team, and away team.
   - Provides a textarea to input or clear a message.
-- **Event Management:**
-  - Form to add new events with timestamps.
-  - Editable list of existing events with options to edit.
 - **Authentication:**
   - Provides a login form for admin access.
 
-**Key HTML Elements:**
-- `<form method="POST">`: Used for updating game state and events.
-- `<textarea>`: For inputting messages and event content.
-- `<select>`: For choosing game stages and teams.
-- `<button>`: For submitting forms and interacting with the admin panel.
-
-### /data Endpoint
-
-The `/data` endpoint provides a JSON API for the public dashboard to fetch real-time game data.
+### admin.html
+The `events.html` file provides the interface for administrators to manage events.
 
 **Key Features:**
-- **Data Provided:**
-  - The endpoint returns a JSON object containing:
-    - `current_stage`: The current stage of the game (e.g., "1st Period").
-    - `home_team`: The name of the home team.
-    - `away_team`: The name of the away team.
-    - `home_score`: The current score of the home team.
-    - `away_score`: The current score of the away team.
-    - `events`: A list of events occurring in the game, each with a timestamp and content.
+- **Event Management**
+  - Form to add new events with timesands.
+  - Editable lis of existing evens with options to edit.
+- **Authentication:**
+  - Provides a login form for access.
 
-**Example Response:**
-
-```json
-{
-  "current_stage": "1st Period",
-  "home_team": "Manchester Storm",
-  "away_team": "Belfast Giants",
-  "home_score": 2,
-  "away_score": 1,
-  "events": [
-    {
-      "timestamp": "10:15",
-      "content": "Manchester Storm goal by Player X"
-    },
-    {
-      "timestamp": "15:42",
-      "content": "Belfast Giants goal by Player Y"
-    }
-  ]
-}
-```
-**Usage:**
-- The dashboard uses this endpoint to periodically request updates and refresh the displayed game data without needing a full page reload.
 
 ### vMix API Integration
 
