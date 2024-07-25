@@ -5,6 +5,7 @@ from datetime import datetime
 import time
 
 app = Flask(__name__)
+app.secret_key = 'BingBong'
 
 app_state = {
     'is_logged_in': False,
