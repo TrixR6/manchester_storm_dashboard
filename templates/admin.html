@@ -20,6 +20,10 @@
             height: 40px;
         }
 
+        .navbar-text {
+            font-weight: bold;
+        }
+
         .navbar-nav .nav-link {
             color: #FFD700 !important;
         }
@@ -93,6 +97,9 @@
                     <a class="nav-link" href="/">Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/roster">Rosters</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/admin">Admin Panel</a>
                 </li>
                 <li class="nav-item">
@@ -163,6 +170,8 @@
                     <option value="Guildford Flames" data-logo="https://www.eliteleague.co.uk/photo/team/team_10.png" {% if state.away_team == 'Guildford Flames' %}selected{% endif %}>Guildford Flames</option>
                     <option value="Nottingham Panthers" data-logo="https://www.eliteleague.co.uk/photo/team/team_12.png" {% if state.away_team == 'Nottingham Panthers' %}selected{% endif %}>Nottingham Panthers</option>
                     <option value="Sheffield Steelers" data-logo="https://www.eliteleague.co.uk/photo/team/team_13.png" {% if state.away_team == 'Sheffield Steelers' %}selected{% endif %}>Sheffield Steelers</option>
+                    <option value="Université du Québec à Trois-Rivières Patriotes" data-logo="https://upload.wikimedia.org/wikipedia/en/c/ca/UQTR_Patriotes_Logo.png" {% if state.away_team == 'Université du Québec à Trois-Rivières Patriotes' %}selected{% endif %}>Université du Québec à Trois-Rivières Patriotes</option>
+                    <option value="Lausitzer Füchse" data-logo="https://upload.wikimedia.org/wikipedia/en/5/57/Logo_Lausitzer_F%C3%BCchse.png" {% if state.away_team == 'Lausitzer Füchse' %}selected{% endif %}>Lausitzer Füchse</option>
                 </select>
             </div>
 

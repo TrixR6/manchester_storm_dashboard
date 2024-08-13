@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Roster</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" type="image/png">
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+
+        .navbar {
+            background-color: #001F3F;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #FFD700 !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #FFFFFF !important;
+        }
+
+        .clock {
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .dropdown {
+            margin-top: 20px;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png"
+                alt="Team Logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/roster">Rosters</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Admin Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/events">Events Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.manchesterstorm.com/" target="_blank">Manchester Storm Website</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.eliteleague.co.uk/" target="_blank">EIHL Website</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://hub.eihl.tv/users/sign_in" target="_blank">EIHL TV Hub</a>
+                </li>
+            </ul>
+            <span class="navbar-text ml-auto clock">
+                <span id="currentStage">{{ state.current_stage.replace('_', ' ') }}</span> -
+                <span id="datetime"></span>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dropdown">
+            <label for="teamSelect">Select a Team:</label>
+            <select class="form-control" id="teamSelect" onchange="fetchRoster()">
+                <option value="" disabled selected>Select a team</option>
+                <option value="Manchester Storm">Manchester Storm</option>
+                <option value="Belfast Giants">Belfast Giants</option>
+                <option value="Cardiff Devils">Cardiff Devils</option>
+                <option value="Coventry Blaze">Coventry Blaze</option>
+                <option value="Dundee Stars">Dundee Stars</option>
+                <option value="Fife Flyers">Fife Flyers</option>
+                <option value="Glasgow Clan">Glasgow Clan</option>
+                <option value="Guildford Flames">Guildford Flames</option>
+                <option value="Nottingham Panthers">Nottingham Panthers</option>
+                <option value="Sheffield Steelers">Sheffield Steelers</option>
+                <option value="Université du Québec à Trois-Rivières Patriotes">Université du Québec à Trois-Rivières Patriotes</option>
+                <option value="Lausitzer Füchse">Lausitzer Füchse</option>
+            </select>
+        </div>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Nationality</th>
+                    <th>Shot/Catch</th>
+                </tr>
+            </thead>
+            <tbody id="rosterTable">
+                <tr>
+                    <td colspan="5" class="text-center">Please select a team to view the roster</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('datetime').innerText = now.toLocaleDateString('en-US', options).replace(' at ', ' - ');
+        }
+
+        function fetchRoster() {
+            const team = document.getElementById('teamSelect').value;
+            if (team) {
+                fetch('/get_roster', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ team: team })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const rosterTable = document.getElementById('rosterTable');
+                    rosterTable.innerHTML = '';
+                    data.forEach(player => {
+                        const row = `
+                            <tr>
+                                <td>${player.number}</td>
+                                <td>${player.name}</td>
+                                <td>${player.position}</td>
+                                <td>${player.nationality}</td>
+                                <td>${player.shot_catch}</td>
+                            </tr>
+                        `;
+                        rosterTable.insertAdjacentHTML('beforeend', row);
+                    });
+                });
+            }
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+
+</html>

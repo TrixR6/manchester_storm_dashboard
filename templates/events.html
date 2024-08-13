@@ -140,7 +140,7 @@
 
             <div class="form-group">
                 <label for="timestamp">Timestamp:</label>
-                <input type="text" name="timestamp" id="timestamp" class="form-control" placeholder="HH:MM">
+                <input type="text" name="timestamp" id="timestamp" class="form-control" placeholder="MM:SS">
             </div>
 
             <button type="submit" name="add_event" class="btn btn-primary">Add Event</button>
@@ -152,7 +152,7 @@
             <div class="list-group-item event-card">
                 <form method="POST" class="form-inline">
                     <div class="form-group mx-sm-3 mb-2">
-                        <input type="text" class="form-control" name="event_timestamp" value="{{ event.timestamp }}" placeholder="HH:MM">
+                        <input type="text" class="form-control" name="event_timestamp" value="{{ event.timestamp }}" placeholder="MM:SS">
                     </div>
                     <div class="form-group mx-sm-3 mb-2">
                         <textarea class="form-control" name="event_content" style="width: 80%; height: 50px;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">{{ event.content }}</textarea>

@@ -3,6 +3,7 @@ import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
 import time
+import json
 
 app = Flask(__name__)
 app.secret_key = 'BingBong'
@@ -13,8 +14,8 @@ app_state = {
     'game_title': 'Manchester Storm vs Opponent',
     'home_team': 'Manchester Storm',
     'home_team_logo': 'https://www.eliteleague.co.uk/photo/team/team_11.png',
-    'away_team': 'Opponent',
-    'away_team_logo': '',
+    'away_team': 'Sheffield Steelers',
+    'away_team_logo': 'https://www.eliteleague.co.uk/photo/team/team_13.png',
     'message': '',
     'is_message_sent': False,
     'team1_score': 0,
@@ -32,7 +33,9 @@ teams = {
     'Glasgow Clan': 'https://www.eliteleague.co.uk/photo/team/team_9.png',
     'Guildford Flames': 'https://www.eliteleague.co.uk/photo/team/team_10.png',
     'Nottingham Panthers': 'https://www.eliteleague.co.uk/photo/team/team_12.png',
-    'Sheffield Steelers': 'https://www.eliteleague.co.uk/photo/team/team_13.png'
+    'Sheffield Steelers': 'https://www.eliteleague.co.uk/photo/team/team_13.png',
+    'Université du Québec à Trois-Rivières Patriotes': 'https://upload.wikimedia.org/wikipedia/en/c/ca/UQTR_Patriotes_Logo.png',
+    'Lausitzer Füchse': 'https://upload.wikimedia.org/wikipedia/en/5/57/Logo_Lausitzer_F%C3%BCchse.png'
 }
 
 vmix_cache = {
@@ -125,6 +128,22 @@ def admin():
             return redirect(url_for('admin'))
     
     return render_template('admin.html', state=app_state)
+
+with open('roster_data.json') as f:
+    roster_data = json.load(f)
+
+@app.route('/roster')
+def roster():
+    teams = roster_data.keys()
+    return render_template('roster.html', teams=teams,state=app_state)
+
+@app.route('/get_roster', methods=['POST'])
+def get_roster():
+    team = request.json['team']
+    if team in roster_data:
+        return jsonify(roster_data[team])
+    else:
+        return jsonify([])
 
 @app.route('/events', methods=['GET', 'POST'])
 def events():
