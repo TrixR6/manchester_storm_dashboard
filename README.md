@@ -103,7 +103,7 @@ if title.get('title') == "Scoreboard":
 **Clone the Repository:**
 
 ```bash
-git clone https://github.com/yourusername/manchester_storm_dashboard.git
+git clone https://github.com/TrixR6/manchester_storm_dashboard.git
 ```
 
 **Install Dependancies:**
