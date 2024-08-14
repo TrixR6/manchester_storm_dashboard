@@ -1,57 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Roster</title>
+    <title>Edit Rundown</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" type="image/png">
     <style>
         body {
             background-color: #FFFFFF;
             color: #000000;
         }
-
         .navbar {
             background-color: #001F3F;
         }
-
         .navbar-brand img {
             height: 40px;
         }
-
         .navbar-nav .nav-link {
             color: #FFD700 !important;
         }
-
         .navbar-nav .nav-link:hover {
             color: #FFFFFF !important;
         }
-
-        .clock {
-            font-weight: bold;
-            color: #FFD700;
-        }
-
-        .dropdown {
-            margin-top: 20px;
-        }
-
-        .table {
-            margin-top: 20px;
+        .form-group {
+            margin-bottom: 15px;
         }
     </style>
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png"
-                alt="Team Logo"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" alt="Logo"></a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -93,45 +71,58 @@
             </span>
         </div>
     </nav>
-
     <div class="container">
-        <div class="dropdown">
-            <label for="teamSelect">Select a Team:</label>
-            <select class="form-control" id="teamSelect" onchange="fetchRoster()">
-                <option value="" disabled selected>Select a team</option>
-                <option value="Manchester Storm">Manchester Storm</option>
-                <option value="Belfast Giants">Belfast Giants</option>
-                <option value="Cardiff Devils">Cardiff Devils</option>
-                <option value="Coventry Blaze">Coventry Blaze</option>
-                <option value="Dundee Stars">Dundee Stars</option>
-                <option value="Fife Flyers">Fife Flyers</option>
-                <option value="Glasgow Clan">Glasgow Clan</option>
-                <option value="Guildford Flames">Guildford Flames</option>
-                <option value="Nottingham Panthers">Nottingham Panthers</option>
-                <option value="Sheffield Steelers">Sheffield Steelers</option>
-                <option value="Université du Québec à Trois-Rivières Patriotes">Université du Québec à Trois-Rivières Patriotes</option>
-                <option value="Lausitzer Füchse">Lausitzer Füchse</option>
-            </select>
-        </div>
-
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Number</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Nationality</th>
-                    <th>Shot/Catch</th>
-                </tr>
-            </thead>
-            <tbody id="rosterTable">
-                <tr>
-                    <td colspan="5" class="text-center">Please select a team to view the roster</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 class="mt-4">Edit Rundown</h3>
+        <form method="POST">
+            <div class="form-group">
+                <label for="item_name">Item Name:</label>
+                <input type="text" class="form-control" id="item_name" name="item_name" required>
+            </div>
+            <div class="form-group">
+                <label for="start_time">Start Time:</label>
+                <input type="time" class="form-control" id="start_time" name="start_time" required>
+            </div>
+            <div class="form-group">
+                <label for="duration">Duration (MM:SS):</label>
+                <input type="text" class="form-control" id="duration" name="duration" placeholder="Minutes:Seconds" required>
+            </div>
+            <div class="form-group">
+                <label for="notes">Notes:</label>
+                <textarea class="form-control" id="notes" name="notes"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="video">Video:</label>
+                <input type="text" class="form-control" id="video" name="video">
+            </div>
+            <div class="form-group">
+                <label for="graphics">Graphics:</label>
+                <input type="text" class="form-control" id="graphics" name="graphics">
+            </div>
+            <div class="form-group">
+                <label for="audio">Audio:</label>
+                <input type="text" class="form-control" id="audio" name="audio">
+            </div>
+            <div class="form-group">
+                <label for="script">Script:</label>
+                <input type="text" class="form-control" id="script" name="script">
+            </div>
+            <div class="form-group">
+                <label for="talent">Talent:</label>
+                <input type="text" class="form-control" id="talent" name="talent">
+            </div>
+            <div class="form-group">
+                <label for="color">Segment Color:</label>
+                <select class="form-control" id="color" name="color">
+                    <option value="Pink">Pink (GFX)</option>
+                    <option value="Yellow">Yellow (Video)</option>
+                    <option value="Red">Red (Live)</option>
+                    <option value="Green">Green (Replay)</option>
+                    <option value="Purple">Purple (Break)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Segment</button>
+        </form>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -142,39 +133,8 @@
             document.getElementById('datetime').innerText = now.toLocaleDateString('en-US', options).replace(' at ', ' - ');
         }
 
-        function fetchRoster() {
-            const team = document.getElementById('teamSelect').value;
-            if (team) {
-                fetch('/get_roster', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ team: team })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const rosterTable = document.getElementById('rosterTable');
-                    rosterTable.innerHTML = '';
-                    data.forEach(player => {
-                        const row = `
-                            <tr>
-                                <td>${player.number}</td>
-                                <td>${player.name}</td>
-                                <td>${player.position}</td>
-                                <td>${player.nationality}</td>
-                                <td>${player.shot_catch}</td>
-                            </tr>
-                        `;
-                        rosterTable.insertAdjacentHTML('beforeend', row);
-                    });
-                });
-            }
-        }
-
         setInterval(updateClock, 1000);
         updateClock();
     </script>
 </body>
-
 </html>

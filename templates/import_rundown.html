@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Rundown</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+        .navbar {
+            background-color: #001F3F;
+        }
+        .navbar-brand img {
+            height: 40px;
+        }
+        .navbar-nav .nav-link {
+            color: #FFD700 !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #FFFFFF !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" alt="Logo"></a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/roster">Rosters</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rundown">Rundown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/edit_rundown">Edit Rundown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/import_rundown">Import Rundown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/export_rundown">Export Rundown</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h3 class="mt-4">Import Rundown</h3>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="json_file">Select JSON File:</label>
+                <input type="file" class="form-control" id="json_file" name="json_file" accept=".json" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Import Rundown</button>
+        </form>
+    </div>
+</body>
+</html>

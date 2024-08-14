@@ -124,6 +124,22 @@
         .event-card-body {
             color: #000000;
         }
+        .rundown-header {
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #001F3F;
+            color: #FFD700;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .rundown-content {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .table {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -137,6 +153,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Dashboard</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="rundownDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Rundown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="rundownDropdown">
+                        <a class="dropdown-item" href="/rundown">View Rundown</a>
+                        <a class="dropdown-item" href="/edit_rundown">Edit Rundown</a>
+                        <a class="dropdown-item" href="/import_rundown">Import Rundown</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/roster">Rosters</a>
                 </li>
@@ -146,14 +172,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/events">Events Management</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.manchesterstorm.com/" target="_blank">Manchester Storm Website</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.eliteleague.co.uk/" target="_blank">EIHL Website</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://hub.eihl.tv/users/sign_in" target="_blank">EIHL TV Hub</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="miscDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Misc
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="miscDropdown">
+                        <a class="dropdown-item" href="https://www.manchesterstorm.com/" target="_blank">Manchester Storm Website</a>
+                        <a class="dropdown-item" href="https://www.eliteleague.co.uk/" target="_blank">EIHL Website</a>
+                        <a class="dropdown-item" href="https://hub.eihl.tv/users/sign_in" target="_blank">EIHL TV Hub</a>
+                    </div>
                 </li>
             </ul>
             <span class="navbar-text ml-auto clock">
@@ -185,6 +212,44 @@
                 </div>
             </div>
         </div>
+        <div class="container">
+            <div class="rundown-header" onclick="toggleRundown()">Rundown (Click to Expand/Collapse)</div>
+            <div class="rundown-content">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Segment Number</th>
+                            <th>Item Name</th>
+                            <th>Start Time</th>
+                            <th>Duration</th>
+                            <th>Notes</th>
+                            <th>Video</th>
+                            <th>Graphics</th>
+                            <th>Audio</th>
+                            <th>Script</th>
+                            <th>Talent</th>
+                            <th>Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for segment in rundown %}
+                        <tr style="background-color: {{ segment.color }};">
+                            <td>{{ segment.number }}</td>
+                            <td>{{ segment.item_name }}</td>
+                            <td>{{ segment.start_time }}</td>
+                            <td>{{ segment.duration }}</td>
+                            <td>{{ segment.notes }}</td>
+                            <td>{{ segment.video }}</td>
+                            <td>{{ segment.graphics }}</td>
+                            <td>{{ segment.audio }}</td>
+                            <td>{{ segment.script }}</td>
+                            <td>{{ segment.talent }}</td>
+                            <td>{{ segment.color_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         <div class="events-timeline">
             <h3>Events Timeline</h3>
             <div class="list-group">
@@ -241,6 +306,11 @@
                         `).join('');
                     document.querySelector('.events-timeline .list-group').innerHTML = eventsList;
                 });
+        }
+
+        function toggleRundown() {
+            const content = document.querySelector('.rundown-content');
+            content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none';
         }
 
         setInterval(updateClock, 1000);

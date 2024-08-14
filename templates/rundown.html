@@ -1,57 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Roster</title>
+    <title>Rundown View</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" type="image/png">
     <style>
         body {
             background-color: #FFFFFF;
             color: #000000;
         }
-
         .navbar {
             background-color: #001F3F;
         }
-
         .navbar-brand img {
             height: 40px;
         }
-
         .navbar-nav .nav-link {
             color: #FFD700 !important;
         }
-
         .navbar-nav .nav-link:hover {
             color: #FFFFFF !important;
         }
-
-        .clock {
-            font-weight: bold;
-            color: #FFD700;
-        }
-
-        .dropdown {
-            margin-top: 20px;
-        }
-
         .table {
             margin-top: 20px;
         }
     </style>
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png"
-                alt="Team Logo"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" alt="Logo"></a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -77,7 +55,7 @@
                     <a class="nav-link" href="/events">Events Management</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="miscDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" id="miscDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Misc
                     </a>
                     <div class="dropdown-menu" aria-labelledby="miscDropdown">
@@ -93,45 +71,48 @@
             </span>
         </div>
     </nav>
-
     <div class="container">
-        <div class="dropdown">
-            <label for="teamSelect">Select a Team:</label>
-            <select class="form-control" id="teamSelect" onchange="fetchRoster()">
-                <option value="" disabled selected>Select a team</option>
-                <option value="Manchester Storm">Manchester Storm</option>
-                <option value="Belfast Giants">Belfast Giants</option>
-                <option value="Cardiff Devils">Cardiff Devils</option>
-                <option value="Coventry Blaze">Coventry Blaze</option>
-                <option value="Dundee Stars">Dundee Stars</option>
-                <option value="Fife Flyers">Fife Flyers</option>
-                <option value="Glasgow Clan">Glasgow Clan</option>
-                <option value="Guildford Flames">Guildford Flames</option>
-                <option value="Nottingham Panthers">Nottingham Panthers</option>
-                <option value="Sheffield Steelers">Sheffield Steelers</option>
-                <option value="Université du Québec à Trois-Rivières Patriotes">Université du Québec à Trois-Rivières Patriotes</option>
-                <option value="Lausitzer Füchse">Lausitzer Füchse</option>
-            </select>
-        </div>
-
-        <table class="table table-striped table-bordered">
+        <h3 class="mt-4">Show Rundown</h3>
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Number</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Nationality</th>
-                    <th>Shot/Catch</th>
+                    <th>Segment Number</th>
+                    <th>Item Name</th>
+                    <th>Start Time</th>
+                    <th>Duration</th>
+                    <th>Notes</th>
+                    <th>Video</th>
+                    <th>Graphics</th>
+                    <th>Audio</th>
+                    <th>Script</th>
+                    <th>Talent</th>
+                    <th>Color</th>
                 </tr>
             </thead>
-            <tbody id="rosterTable">
-                <tr>
-                    <td colspan="5" class="text-center">Please select a team to view the roster</td>
+            <tbody>
+                {% for segment in rundown %}
+                <tr style="background-color: {{ segment.color }};">
+                    <td>{{ segment.number }}</td>
+                    <td>{{ segment.item_name }}</td>
+                    <td>{{ segment.start_time }}</td>
+                    <td>{{ segment.duration }}</td>
+                    <td>{{ segment.notes }}</td>
+                    <td>{{ segment.video }}</td>
+                    <td>{{ segment.graphics }}</td>
+                    <td>{{ segment.audio }}</td>
+                    <td>{{ segment.script }}</td>
+                    <td>{{ segment.talent }}</td>
+                    <td>{{ segment.color_name }}</td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
-
+    <div class="mt-3">
+        <a href="/export_rundown" class="btn btn-success">Export Rundown as JSON</a>
+        <a href="/import_rundown" class="btn btn-primary">Import Rundown from JSON</a>
+    </div>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -142,39 +123,8 @@
             document.getElementById('datetime').innerText = now.toLocaleDateString('en-US', options).replace(' at ', ' - ');
         }
 
-        function fetchRoster() {
-            const team = document.getElementById('teamSelect').value;
-            if (team) {
-                fetch('/get_roster', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ team: team })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const rosterTable = document.getElementById('rosterTable');
-                    rosterTable.innerHTML = '';
-                    data.forEach(player => {
-                        const row = `
-                            <tr>
-                                <td>${player.number}</td>
-                                <td>${player.name}</td>
-                                <td>${player.position}</td>
-                                <td>${player.nationality}</td>
-                                <td>${player.shot_catch}</td>
-                            </tr>
-                        `;
-                        rosterTable.insertAdjacentHTML('beforeend', row);
-                    });
-                });
-            }
-        }
-
         setInterval(updateClock, 1000);
         updateClock();
     </script>
 </body>
-
 </html>

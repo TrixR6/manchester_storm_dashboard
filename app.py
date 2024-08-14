@@ -1,12 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, send_file, make_response
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
 import time
 import json
+import io
 
 app = Flask(__name__)
 app.secret_key = 'BingBong'
+rundown = []
 
 app_state = {
     'is_logged_in': False,
@@ -91,7 +93,7 @@ def dashboard():
         app_state['team1_score'] = team1_score
         app_state['team2_score'] = team2_score
     now = datetime.now()
-    return render_template('dashboard.html', state=app_state, now=now)
+    return render_template('dashboard.html', rundown=rundown,state=app_state, now=now)
 
 @app.route('/data')
 def data():
@@ -171,6 +173,58 @@ def events():
             return redirect(url_for('events'))
     
     return render_template('events.html', state=app_state)
+
+
+@app.route('/rundown')
+def show_rundown():
+    return render_template('rundown.html', rundown=rundown, state=app_state)
+
+@app.route('/edit_rundown', methods=['GET', 'POST'])
+def edit_rundown():
+    if request.method == 'POST':
+        segment_number = len(rundown) + 1
+        new_segment = {
+            'number': segment_number,
+            'item_name': request.form['item_name'],
+            'start_time': request.form['start_time'],
+            'duration': request.form['duration'],
+            'notes': request.form['notes'],
+            'video': request.form['video'],
+            'graphics': request.form['graphics'],
+            'audio': request.form['audio'],
+            'script': request.form['script'],
+            'talent': request.form['talent'],
+            'color': request.form['color'].lower(),
+            'color_name': request.form['color']
+        }
+
+        if new_segment['color'] == 'purple':
+            new_segment['color'] = '#D8BFD8'
+        rundown.append(new_segment)
+        return redirect(url_for('show_rundown'))
+    return render_template('edit_rundown.html', state=app_state)
+
+@app.route('/export_rundown')
+def export_rundown():
+    json_rundown = json.dumps(rundown, indent=4)
+    buffer = io.StringIO()
+    buffer.write(json_rundown)
+    buffer.seek(0)
+    response = make_response(buffer.getvalue())
+    response.headers['Content-Disposition'] = 'attachment; filename=rundown.json'
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+@app.route('/import_rundown', methods=['GET', 'POST'])
+def import_rundown():
+    if request.method == 'POST':
+        file = request.files['json_file']
+        if file:
+            imported_rundown = json.load(file)
+            global rundown
+            rundown = imported_rundown
+            return redirect(url_for('show_rundown'))
+    return render_template('import_rundown.html', state=app_state)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
