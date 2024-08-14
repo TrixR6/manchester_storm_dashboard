@@ -5,6 +5,7 @@ from datetime import datetime
 import time
 import json
 import io
+import os
 
 app = Flask(__name__)
 app.secret_key = 'BingBong'
@@ -13,7 +14,7 @@ rundown = []
 app_state = {
     'is_logged_in': False,
     'current_stage': 'Pre Show',
-    'game_title': 'Manchester Storm vs Opponent',
+    'game_title': 'Manchester Storm vs Sheffield Steelers',
     'home_team': 'Manchester Storm',
     'home_team_logo': 'https://www.eliteleague.co.uk/photo/team/team_11.png',
     'away_team': 'Sheffield Steelers',
@@ -22,7 +23,8 @@ app_state = {
     'is_message_sent': False,
     'team1_score': 0,
     'team2_score': 0,
-    'events': []
+    'events': [],
+    'current_segment': None
 }
 
 teams = {
@@ -93,7 +95,7 @@ def dashboard():
         app_state['team1_score'] = team1_score
         app_state['team2_score'] = team2_score
     now = datetime.now()
-    return render_template('dashboard.html', rundown=rundown,state=app_state, now=now)
+    return render_template('dashboard.html', rundown=rundown, state=app_state, now=now)
 
 @app.route('/data')
 def data():
@@ -137,7 +139,7 @@ with open('roster_data.json') as f:
 @app.route('/roster')
 def roster():
     teams = roster_data.keys()
-    return render_template('roster.html', teams=teams,state=app_state)
+    return render_template('roster.html', teams=teams, state=app_state)
 
 @app.route('/get_roster', methods=['POST'])
 def get_roster():
@@ -174,7 +176,6 @@ def events():
     
     return render_template('events.html', state=app_state)
 
-
 @app.route('/rundown')
 def show_rundown():
     return render_template('rundown.html', rundown=rundown, state=app_state)
@@ -199,8 +200,9 @@ def edit_rundown():
         }
 
         if new_segment['color'] == 'purple':
-            new_segment['color'] = '#D8BFD8'
+            new_segment['color'] = '#D8BFD8'  # Light purple
         rundown.append(new_segment)
+        save_rundown_state()
         return redirect(url_for('show_rundown'))
     return render_template('edit_rundown.html', state=app_state)
 
@@ -223,8 +225,73 @@ def import_rundown():
             imported_rundown = json.load(file)
             global rundown
             rundown = imported_rundown
+            save_rundown_state()
             return redirect(url_for('show_rundown'))
     return render_template('import_rundown.html', state=app_state)
+
+@app.route('/reorder_rundown', methods=['POST'])
+def reorder_rundown():
+    new_order = request.json['new_order']
+    global rundown
+    reordered_rundown = [None] * len(rundown)
+    
+    for i, segment_number in enumerate(new_order):
+        for segment in rundown:
+            if segment['number'] == segment_number:
+                reordered_rundown[i] = segment
+                break
+    
+    for i, segment in enumerate(reordered_rundown):
+        segment['number'] = i + 1
+    
+    rundown = reordered_rundown
+    save_rundown_state()
+    return jsonify({"status": "success"})
+
+@app.route('/edit_rundown_segment/<int:segment_number>', methods=['POST'])
+def edit_rundown_segment(segment_number):
+    updated_segment = request.json
+    global rundown
+
+    for segment in rundown:
+        if segment['number'] == segment_number:
+            segment.update(updated_segment)
+            break
+    
+    save_rundown_state()
+    return jsonify({"status": "success"})
+
+@app.route('/delete_rundown_segment/<int:segment_number>', methods=['POST'])
+def delete_rundown_segment(segment_number):
+    global rundown
+    rundown = [segment for segment in rundown if segment['number'] != segment_number]
+
+    for i, segment in enumerate(rundown):
+        segment['number'] = i + 1
+
+    save_rundown_state()
+    return jsonify({"status": "success"})
+
+@app.route('/set_current_segment/<int:segment_number>', methods=['POST'])
+def set_current_segment(segment_number):
+    global app_state
+    app_state['current_segment'] = segment_number
+    save_rundown_state()
+    return jsonify({"status": "success"})
+
+def save_rundown_state():
+    with open('rundown_state.json', 'w') as f:
+        json.dump({'rundown': rundown, 'state': app_state}, f)
+
+def load_rundown_state():
+    global rundown, app_state
+    if os.path.exists('rundown_state.json'):
+        with open('rundown_state.json', 'r') as f:
+            data = json.load(f)
+            rundown = data.get('rundown', [])
+            app_state = data.get('state', app_state)
+
+load_rundown_state()
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

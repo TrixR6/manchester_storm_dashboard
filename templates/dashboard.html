@@ -24,9 +24,9 @@
             color: #FFD700 !important;
         }
 
-            .navbar-nav .nav-link:hover {
-                color: #FFFFFF !important;
-            }
+        .navbar-nav .nav-link:hover {
+            color: #FFFFFF !important;
+        }
 
         .clock {
             font-weight: bold;
@@ -54,10 +54,10 @@
             margin: 10px;
         }
 
-            .team img {
-                height: 50px;
-                margin-right: 10px;
-            }
+        .team img {
+            height: 50px;
+            margin-right: 10px;
+        }
 
         .scoreboard {
             text-align: center;
@@ -124,6 +124,7 @@
         .event-card-body {
             color: #000000;
         }
+
         .rundown-header {
             cursor: pointer;
             font-weight: bold;
@@ -133,12 +134,26 @@
             margin-bottom: 10px;
             border-radius: 10px;
         }
+
         .rundown-content {
             display: none;
             margin-bottom: 20px;
         }
+
         .table {
             margin-top: 10px;
+        }
+
+        .btn-action {
+            margin-right: 5px;
+        }
+
+        .current-segment {
+            border: 3px solid #FFD700;
+        }
+
+        .editable {
+            display: none;
         }
     </style>
 </head>
@@ -215,7 +230,7 @@
         <div class="container">
             <div class="rundown-header" onclick="toggleRundown()">Rundown (Click to Expand/Collapse)</div>
             <div class="rundown-content">
-                <table class="table table-striped">
+                <table id="rundownTable" class="table table-striped">
                     <thead>
                         <tr>
                             <th>Segment Number</th>
@@ -229,22 +244,30 @@
                             <th>Script</th>
                             <th>Talent</th>
                             <th>Color</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for segment in rundown %}
-                        <tr style="background-color: {{ segment.color }};">
+                        <tr id="segment-{{ segment.number }}" class="{% if segment.number == state.current_segment %}current-segment{% endif %}" data-segment-id="{{ segment.number }}" style="background-color: {{ segment.color }};">
                             <td>{{ segment.number }}</td>
-                            <td>{{ segment.item_name }}</td>
-                            <td>{{ segment.start_time }}</td>
-                            <td>{{ segment.duration }}</td>
-                            <td>{{ segment.notes }}</td>
-                            <td>{{ segment.video }}</td>
-                            <td>{{ segment.graphics }}</td>
-                            <td>{{ segment.audio }}</td>
-                            <td>{{ segment.script }}</td>
-                            <td>{{ segment.talent }}</td>
-                            <td>{{ segment.color_name }}</td>
+                            <td><span class="static">{{ segment.item_name }}</span><input type="text" class="form-control editable" value="{{ segment.item_name }}" name="item_name"></td>
+                            <td><span class="static">{{ segment.start_time }}</span><input type="time" class="form-control editable" value="{{ segment.start_time }}" name="start_time"></td>
+                            <td><span class="static">{{ segment.duration }}</span><input type="text" class="form-control editable" value="{{ segment.duration }}" name="duration"></td>
+                            <td><span class="static">{{ segment.notes }}</span><input type="text" class="form-control editable" value="{{ segment.notes }}" name="notes"></td>
+                            <td><span class="static">{{ segment.video }}</span><input type="text" class="form-control editable" value="{{ segment.video }}" name="video"></td>
+                            <td><span class="static">{{ segment.graphics }}</span><input type="text" class="form-control editable" value="{{ segment.graphics }}" name="graphics"></td>
+                            <td><span class="static">{{ segment.audio }}</span><input type="text" class="form-control editable" value="{{ segment.audio }}" name="audio"></td>
+                            <td><span class="static">{{ segment.script }}</span><input type="text" class="form-control editable" value="{{ segment.script }}" name="script"></td>
+                            <td><span class="static">{{ segment.talent }}</span><input type="text" class="form-control editable" value="{{ segment.talent }}" name="talent"></td>
+                            <td><span class="static">{{ segment.color_name }}</span><input type="text" class="form-control editable" value="{{ segment.color_name }}" name="color_name"></td>
+                            <td>
+                                <button class="btn btn-primary btn-action edit-btn" onclick="editSegment(this)">Edit</button>
+                                <button class="btn btn-success btn-action save-btn editable" onclick="saveSegment(this)" style="display:none;">Save</button>
+                                <button class="btn btn-danger btn-action" onclick="deleteSegment({{ segment.number }})">Delete</button>
+                                <button class="btn btn-secondary btn-action" onclick="setCurrentSegment({{ segment.number }})"
+                                    {% if segment.number == state.current_segment %} disabled {% endif %}>Set Current</button>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -263,9 +286,10 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         function updateClock() {
             const now = new Date();
@@ -310,7 +334,108 @@
 
         function toggleRundown() {
             const content = document.querySelector('.rundown-content');
-            content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none';
+            const isExpanded = content.style.display === 'block';
+            document.cookie = "rundownExpanded=" + (isExpanded ? "false" : "true") + "; path=/";
+
+            content.style.display = isExpanded ? 'none' : 'block';
+        }
+
+        function checkRundownState() {
+            const cookies = document.cookie.split(';');
+            let rundownExpanded = false;
+            cookies.forEach(cookie => {
+                const [name, value] = cookie.trim().split('=');
+                if (name === "rundownExpanded") {
+                    rundownExpanded = value === "true";
+                }
+            });
+
+            if (rundownExpanded) {
+                document.querySelector('.rundown-content').style.display = 'block';
+            }
+        }
+
+        $(function() {
+            checkRundownState();
+            $("#rundownTable tbody").sortable({
+                update: function(event, ui) {
+                    var new_order = $(this).sortable('toArray', {attribute: 'data-segment-id'});
+                    $.ajax({
+                        url: '/reorder_rundown',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ new_order: new_order }),
+                        success: function(response) {
+                            location.reload();  // Reload the page to reflect changes
+                        }
+                    });
+                }
+            }).disableSelection();
+        });
+
+        function editSegment(button) {
+            var row = $(button).closest('tr');
+            row.find('.static').hide();
+            row.find('.editable').show();
+            row.find('.edit-btn').hide();
+            row.find('.save-btn').show();
+        }
+
+        function saveSegment(button) {
+            var row = $(button).closest('tr');
+            var segmentNumber = row.data('segment-id');
+            var segmentData = {
+                item_name: row.find('input[name="item_name"]').val(),
+                start_time: row.find('input[name="start_time"]').val(),
+                duration: row.find('input[name="duration"]').val(),
+                notes: row.find('input[name="notes"]').val(),
+                video: row.find('input[name="video"]').val(),
+                graphics: row.find('input[name="graphics"]').val(),
+                audio: row.find('input[name="audio"]').val(),
+                script: row.find('input[name="script"]').val(),
+                talent: row.find('input[name="talent"]').val(),
+                color_name: row.find('input[name="color_name"]').val()
+            };
+            $.ajax({
+                url: `/edit_rundown_segment/${segmentNumber}`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(segmentData),
+                success: function(response) {
+                    location.reload();  // Reload the page to reflect changes
+                },
+                error: function(xhr, status, error) {
+                    alert('Failed to save segment: ' + xhr.responseText);
+                }
+            });
+        }
+
+        function deleteSegment(segmentNumber) {
+            if (confirm("Are you sure you want to delete this segment?")) {
+                $.ajax({
+                    url: `/delete_rundown_segment/${segmentNumber}`,
+                    type: 'POST',
+                    success: function(response) {
+                        location.reload();  // Reload the page to reflect changes
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Failed to delete segment: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+
+        function setCurrentSegment(segmentNumber) {
+            $.ajax({
+                url: `/set_current_segment/${segmentNumber}`,
+                type: 'POST',
+                success: function(response) {
+                    location.reload();  // Reload the page to reflect changes
+                },
+                error: function(xhr, status, error) {
+                    alert('Failed to set current segment: ' + xhr.responseText);
+                }
+            });
         }
 
         setInterval(updateClock, 1000);
