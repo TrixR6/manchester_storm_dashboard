@@ -6,10 +6,33 @@ import time
 import json
 import io
 import os
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = 'BingBong'
 rundown = []
+
+VMIX_URL = 'http://localhost:8088/api'
+
+def send_vmix_command(command):
+    requests.get(VMIX_URL + command)
+
+def init_db():
+    conn = sqlite3.connect('vmix_buttons.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS buttons (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            action TEXT,
+            mix_number INTEGER,
+            input_number INTEGER,
+            playlist_index INTEGER,
+            color TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
 app_state = {
     'is_logged_in': False,
@@ -291,7 +314,107 @@ def load_rundown_state():
             rundown = data.get('rundown', [])
             app_state = data.get('state', app_state)
 
+@app.route('/vmix_control')
+def vmix_control():
+    conn = sqlite3.connect('vmix_buttons.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM buttons")
+    buttons = c.fetchall()
+    conn.close()
+    return render_template('control.html', buttons=buttons, state=app_state)
+
+@app.route('/edit_vmix_buttons')
+def edit_vmix_buttons():
+    conn = sqlite3.connect('vmix_buttons.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM buttons")
+    buttons = c.fetchall()
+    conn.close()
+
+    status = request.args.get('status')
+    return render_template('buttonedit.html', buttons=buttons, state=app_state, status=status)
+
+@app.route('/api/vmix_control', methods=['POST'])
+def vmix_control_api():
+    try:
+        data = request.json
+        action = data.get('action')
+        mix_number = data.get('mix_number')
+        input_number = data.get('input_number')
+        playlist_index = data.get('playlist_index')
+
+        if action == "change_program":
+            command = f"?Function=Cut&Input={input_number}&Mix={mix_number}"
+            send_vmix_command(command)
+        elif action == "play_pause":
+            command = f"?Function=PlayPause&Input={input_number}"
+            send_vmix_command(command)
+        elif action == "restart":
+            command = f"?Function=Restart&Input={input_number}"
+            send_vmix_command(command)
+        elif action == "select_playlist":
+            if playlist_index is not None:
+                command = f"?Function=SelectIndex&Value={playlist_index}&Input={input_number}"
+                send_vmix_command(command)
+            command = f"?Function=Cut&Input={input_number}&Mix={mix_number}"
+            send_vmix_command(command)
+
+        return redirect(url_for('vmix_control', status='action_success'))
+    except Exception as e:
+        print(f"Error: {e}")
+        return redirect(url_for('vmix_control', status='action_failed'))
+
+
+
+@app.route('/api/edit_vmix_buttons', methods=['POST'])
+def edit_vmix_buttons_api():
+    try:
+        data = request.form
+        button_id = data.get('button_id')
+        name = data.get('name')
+        action = data.get('action')
+        mix_number = data.get('mix_number')
+        input_number = data.get('input_number')
+        playlist_index = data.get('playlist_index')
+        color = data.get('color')
+
+        conn = sqlite3.connect('vmix_buttons.db')
+        c = conn.cursor()
+        if button_id:
+            c.execute('''UPDATE buttons SET name=?, action=?, mix_number=?, input_number=?, playlist_index=?, color=?
+                        WHERE id=?''',
+                    (name, action, mix_number, input_number, playlist_index, color, button_id))
+        else:
+            c.execute('''INSERT INTO buttons (name, action, mix_number, input_number, playlist_index, color)
+                        VALUES (?, ?, ?, ?, ?, ?)''',
+                    (name, action, mix_number, input_number, playlist_index, color))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('edit_vmix_buttons', status='success'))
+    except Exception as e:
+        print(f"Error: {e}")
+        return redirect(url_for('edit_vmix_buttons', status='failed'))
+
+@app.route('/api/delete_vmix_button', methods=['POST'])
+def delete_vmix_button_api():
+    try:
+        data = request.json
+        button_id = data['button_id']
+
+        conn = sqlite3.connect('vmix_buttons.db')
+        c = conn.cursor()
+        c.execute("DELETE FROM buttons WHERE id = ?", (button_id,))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('edit_vmix_buttons', status='delete_success'))
+    except Exception as e:
+        print(f"Error: {e}")
+        return redirect(url_for('edit_vmix_buttons', status='delete_failed'))
+
+
+
 load_rundown_state()
 
 if __name__ == '__main__':
+    init_db()
     app.run(host="0.0.0.0", port=5000, debug=True)
