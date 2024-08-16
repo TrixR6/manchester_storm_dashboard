@@ -7,41 +7,7 @@
     <title>Team Roster</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" type="image/png">
-    <style>
-        body {
-            background-color: #FFFFFF;
-            color: #000000;
-        }
-
-        .navbar {
-            background-color: #001F3F;
-        }
-
-        .navbar-brand img {
-            height: 40px;
-        }
-
-        .navbar-nav .nav-link {
-            color: #FFD700 !important;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #FFFFFF !important;
-        }
-
-        .clock {
-            font-weight: bold;
-            color: #FFD700;
-        }
-
-        .dropdown {
-            margin-top: 20px;
-        }
-
-        .table {
-            margin-top: 20px;
-        }
-    </style>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
 </head>
 
 <body>
