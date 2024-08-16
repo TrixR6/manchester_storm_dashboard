@@ -81,14 +81,21 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: action, mix_number: mix_number, input_number: input_number, playlist_index: playlist_index })
-            }).then(response => {
-                if (response.ok) {
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
                     window.location.href = '/vmix_control?status=action_success';
                 } else {
                     window.location.href = '/vmix_control?status=action_failed';
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = '/vmix_control?status=action_failed';
             });
         }
+
 
         function updateClock() {
             const now = new Date();

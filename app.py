@@ -321,7 +321,10 @@ def vmix_control():
     c.execute("SELECT * FROM buttons")
     buttons = c.fetchall()
     conn.close()
-    return render_template('control.html', buttons=buttons, state=app_state)
+
+    status = request.args.get('status')
+    return render_template('control.html', buttons=buttons, state=app_state, status=status)
+
 
 @app.route('/edit_vmix_buttons')
 def edit_vmix_buttons():
@@ -359,10 +362,11 @@ def vmix_control_api():
             command = f"?Function=Cut&Input={input_number}&Mix={mix_number}"
             send_vmix_command(command)
 
-        return redirect(url_for('vmix_control', status='action_success'))
-    except Exception as e:
+        return jsonify({'status': 'success'}), 200
+    except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
-        return redirect(url_for('vmix_control', status='action_failed'))
+        return jsonify({'status': 'failed'}), 500
+
 
 
 
