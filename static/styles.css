@@ -1,33 +1,39 @@
-/* styles.css */
-
 body {
     background-color: #FFFFFF;
     color: #000000;
 }
+
 .navbar {
-    background-color: #001F3F;
+    background-color: #001F3F; /* Same color for both light and dark modes */
 }
+
 .navbar-brand img {
     height: 40px;
 }
-.navbar-nav{
+
+.navbar-nav {
     display: flex;
     align-items: center;
 }
+
 .navbar-nav .dropdown-menu {
     position: absolute;
     top: 100%;
 }
+
 .navbar-nav .nav-link {
     color: #FFD700 !important;
 }
+
 .navbar-nav .nav-link:hover {
     color: #FFFFFF !important;
 }
+
 .clock {
     font-weight: bold;
     color: #FFD700;
 }
+
 .game-title-box {
     text-align: center;
     margin: 20px 0;
@@ -42,15 +48,18 @@ body {
     align-items: center;
     flex-wrap: wrap;
 }
+
 .team {
     display: flex;
     align-items: center;
     margin: 10px;
 }
+
 .team img {
     height: 50px;
     margin-right: 10px;
 }
+
 .scoreboard {
     text-align: center;
     font-size: 2em;
@@ -60,16 +69,19 @@ body {
     justify-content: center;
     align-items: center;
 }
+
 .team-score {
     margin: 0 20px;
     width: 100px;
     text-align: center;
     font-weight: bold;
 }
+
 vs {
     font-size: 1.5em;
     margin: 0 20px;
 }
+
 #messageBox {
     margin-top: 20px;
     padding: 10px;
@@ -79,6 +91,7 @@ vs {
     border-radius: 4px;
     animation: pulse 1s infinite;
 }
+
 @keyframes pulse {
     0% {
         background-color: #FFD700;
@@ -92,38 +105,48 @@ vs {
         background-color: #FFD700;
     }
 }
+
 .events-timeline {
     margin-top: 20px;
 }
+
 .event-card {
     border: 2px solid #001F3F;
     border-radius: 10px;
     margin-bottom: 10px;
     padding: 10px;
 }
+
 .event-card-header {
     font-weight: bold;
     color: #001F3F;
 }
+
 .event-card-body {
     color: #000000;
 }
+
 .rundown-content {
     display: none;
     margin-bottom: 20px;
 }
+
 .table {
     margin-top: 20px;
 }
+
 .btn-action {
     margin-right: 5px;
 }
+
 .current-segment {
     border: 3px solid #FFD700;
 }
+
 .editable {
     display: none;
 }
+
 .rundown-header {
     cursor: pointer;
     font-weight: bold;
@@ -133,33 +156,67 @@ vs {
     margin-bottom: 10px;
     border-radius: 10px;
 }
+
 .form-group {
     margin-bottom: 15px;
 }
+
 .dropdown {
     margin-top: 20px;
 }
+
 textarea {
     min-height: 50px;
     width: 100%;
     overflow-y: hidden;
 }
-.form-control{
+
+.form-control {
     border: 2px solid #001F3F;
 }
+
 .form-inline .form-control {
     flex: 1;
 }
+
 .form-inline .form-group {
     width: 80%;
 }
+
 .form-inline button {
     width: 18%;
 }
+
 .btn-vmix {
     margin: 10px;
     padding: 15px;
     font-size: 16px;
     width: 150px;
     height: 60px;
+}
+
+/* Light mode styles */
+body.light-mode {
+    background-color: white;
+    color: black;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #2e2e2e;
+    color: white;
+}
+
+/* Specific adjustments for tables in dark mode */
+body.dark-mode .table {
+    background-color: #3e3e3e;
+    color: white;
+}
+
+body.dark-mode .table th, body.dark-mode .table td {
+    border-color: #5e5e5e;
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #4e4e4e;
 }
