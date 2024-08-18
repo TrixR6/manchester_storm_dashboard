@@ -1,0 +1,30 @@
+Category,Field,Value
+Commentators,commentators,Max Artis | Matty Flannigan
+Lower Third,Title,Matthew Prestwood
+Lower Third,Subtitle,Match Night Director
+Officials,officials,Official 1 | Official 2 | Official 3 | Official 4
+Penalties Home,Player,#32 Alex Oldale
+Penalties Home,Type,2 Minutes
+Penalties Home,Reason,Hooking
+Penalties Away,Player,#0 Ben Norton
+Penalties Away,Type,2 Minutes
+Penalties Away,Reason,Hooking
+Score Clock,Home Team,Manchester Storm
+Score Clock,Home Team Shortcode,MAN
+Score Clock,Home Team Colour,#FFD700
+Score Clock,Away Team,Sheffield Steelers
+Score Clock,Away Team Shortcode,SHE
+Score Clock,Away Team Colour,#FF8C00
+Score Clock,Current Period,Period 2
+Team Lineups,Home Player 1,#32 Alex Oldale
+Team Lineups,Home Player 2,#34 Lewis McBride
+Team Lineups,Home Player 3,#35 Evan Weninger
+Team Lineups,Home Player 4,#6 Chase Harrison
+Team Lineups,Home Player 5,#9 Tyler Hinam
+Team Lineups,Away Player 1,#1 Matthew Greenfield
+Team Lineups,Away Player 2,#6 Kevin Tansey
+Team Lineups,Away Player 3,#12 Daniel Ciampini
+Team Lineups,Away Player 4,#23 Colton Saucerman
+Team Lineups,Away Player 5,#24 Mark Simpson
+Team Lineups,Home Coach,# Mike Flanagan
+Team Lineups,Away Coach,# Aaron Fox

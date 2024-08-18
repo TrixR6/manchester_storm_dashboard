@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session, send_file, make_response
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, make_response
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -7,6 +7,7 @@ import json
 import io
 import os
 import sqlite3
+import csv
 
 app = Flask(__name__)
 app.secret_key = 'BingBong'
@@ -367,9 +368,6 @@ def vmix_control_api():
         print(f"Error: {e}")
         return jsonify({'status': 'failed'}), 500
 
-
-
-
 @app.route('/api/edit_vmix_buttons', methods=['POST'])
 def edit_vmix_buttons_api():
     try:
@@ -414,6 +412,125 @@ def delete_vmix_button_api():
     except Exception as e:
         print(f"Error: {e}")
         return redirect(url_for('edit_vmix_buttons', status='delete_failed'))
+
+with open('roster_data.json') as f:
+    roster_data = json.load(f)
+
+@app.route('/graphics_control', methods=['GET', 'POST'])
+def graphics_control():
+    saved_data = {}
+    
+    team_shortcodes = {
+        'Manchester Storm': 'MAN',
+        'Sheffield Steelers': 'SHE',
+        'Belfast Giants': 'BEL',
+        'Cardiff Devils': 'CAR',
+        'Coventry Blaze': 'COV',
+        'Dundee Stars': 'DUN',
+        'Fife Flyers': 'FIF',
+        'Glasgow Clan': 'GLA',
+        'Guildford Flames': 'GUI',
+        'Nottingham Panthers': 'NOT',
+        'Université du Québec à Trois-Rivières Patriotes': 'UQTR',
+        'Lausitzer Füchse': 'LAU'
+    }
+
+    if request.method == 'POST':
+        # Handle form submission and save data to CSV
+        home_team = request.form.get('home_team')
+        away_team = request.form.get('away_team')
+
+        home_team_shortcode = team_shortcodes.get(home_team, 'N/A')
+        away_team_shortcode = team_shortcodes.get(away_team, 'N/A')
+
+        # Get the selected home and away players from the form
+        home_players = [
+            request.form.get('home_player_1'),
+            request.form.get('home_player_2'),
+            request.form.get('home_player_3'),
+            request.form.get('home_player_4'),
+            request.form.get('home_player_5')
+        ]
+        
+        away_players = [
+            request.form.get('away_player_1'),
+            request.form.get('away_player_2'),
+            request.form.get('away_player_3'),
+            request.form.get('away_player_4'),
+            request.form.get('away_player_5')
+        ]
+
+        home_coach = request.form.get('home_coach')
+        away_coach = request.form.get('away_coach')
+
+        saved_data = {
+            'commentators': request.form.get('commentators'),
+            'lower_third_title': request.form.get('lower_third_title'),
+            'lower_third_subtitle': request.form.get('lower_third_subtitle'),
+            'officials': request.form.get('officials'),
+            'penalties_home_player': request.form.get('penalties_home_player'),
+            'penalties_home_type': request.form.get('penalties_home_type'),
+            'penalties_home_reason': request.form.get('penalties_home_reason'),
+            'penalties_away_player': request.form.get('penalties_away_player'),
+            'penalties_away_type': request.form.get('penalties_away_type'),
+            'penalties_away_reason': request.form.get('penalties_away_reason'),
+            'home_team': home_team,
+            'home_team_shortcode': home_team_shortcode,
+            'home_team_colour': request.form.get('home_team_colour'),
+            'away_team': away_team,
+            'away_team_shortcode': away_team_shortcode,
+            'away_team_colour': request.form.get('away_team_colour'),
+            'current_period': request.form.get('current_period'),
+            'home_players': home_players,
+            'away_players': away_players,
+            'home_coach': home_coach,
+            'away_coach': away_coach
+        }
+
+        csv_data = [
+            ['Category', 'Field', 'Value'],
+            ['Commentators', 'commentators', saved_data['commentators']],
+            ['Lower Third', 'Title', saved_data['lower_third_title']],
+            ['Lower Third', 'Subtitle', saved_data['lower_third_subtitle']],
+            ['Officials', 'officials', saved_data['officials']],
+            ['Penalties Home', 'Player', saved_data['penalties_home_player']],
+            ['Penalties Home', 'Type', saved_data['penalties_home_type']],
+            ['Penalties Home', 'Reason', saved_data['penalties_home_reason']],
+            ['Penalties Away', 'Player', saved_data['penalties_away_player']],
+            ['Penalties Away', 'Type', saved_data['penalties_away_type']],
+            ['Penalties Away', 'Reason', saved_data['penalties_away_reason']],
+            ['Score Clock', 'Home Team', home_team],
+            ['Score Clock', 'Home Team Shortcode', home_team_shortcode],
+            ['Score Clock', 'Home Team Colour', saved_data['home_team_colour']],
+            ['Score Clock', 'Away Team', away_team],
+            ['Score Clock', 'Away Team Shortcode', away_team_shortcode],
+            ['Score Clock', 'Away Team Colour', saved_data['away_team_colour']],
+            ['Score Clock', 'Current Period', saved_data['current_period']],
+        ]
+
+        # Add the selected home players
+        for i, player in enumerate(home_players, start=1):
+            csv_data.append(['Team Lineups', f'Home Player {i}', player])
+
+        # Add the selected away players
+        for i, player in enumerate(away_players, start=1):
+            csv_data.append(['Team Lineups', f'Away Player {i}', player])
+
+        csv_data.append(['Team Lineups', 'Home Coach', saved_data['home_coach']])
+        csv_data.append(['Team Lineups', 'Away Coach', saved_data['away_coach']])
+
+        # Save to CSV file
+        with open('graphics_data.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(csv_data)
+
+        return redirect(url_for('graphics_control', success=True, **saved_data))
+    
+    # Render the page with current data or empty fields
+    return render_template('graphics_control.html', teams=roster_data.keys(), roster_data=roster_data, state=app_state, saved_data=request.args)
+
+
+
 
 
 

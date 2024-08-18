@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Data for vMix</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" type="image/png">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+</head>
+<body class="light-mode">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-light-mode">
+        <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/en/c/c7/ManchesterStorm.png" alt="Team Logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="rundownDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Rundown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="rundownDropdown">
+                        <a class="dropdown-item" href="/rundown">View Rundown</a>
+                        <a class="dropdown-item" href="/edit_rundown">Edit Rundown</a>
+                        <a class="dropdown-item" href="/import_rundown">Import Rundown</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/roster">Rosters</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Admin Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/events">Events Management</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="miscDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Misc
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="miscDropdown">
+                        <a class="dropdown-item" href="https://www.manchesterstorm.com/" target="_blank">Manchester Storm Website</a>
+                        <a class="dropdown-item" href="https://www.eliteleague.co.uk/" target="_blank">EIHL Website</a>
+                        <a class="dropdown-item" href="https://hub.eihl.tv/users/sign_in" target="_blank">EIHL TV Hub</a>
+                    </div>
+                </li>
+            </ul>
+            <span class="navbar-text ml-auto">
+                <input type="checkbox" id="darkModeToggle" title="Toggle dark mode">
+                <label for="darkModeToggle">Dark Mode</label>
+            </span>
+            <span class="navbar-text ml-auto clock">
+                <span id="currentStage">{{ state.current_stage.replace('_', ' ') }}</span> -
+                <span id="datetime"></span>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="mt-4 mb-4">Edit Data for vMix</h1>
+
+        {% if request.args.get('success') %}
+        <div id="messageBox" class="alert alert-success">Data saved successfully!</div>
+        {% endif %}
+
+        <form action="{{ url_for('graphics_control') }}" method="POST">
+            <div class="form-group">
+                <label for="commentators">Commentators</label>
+                <textarea name="commentators" id="commentators" class="form-control">{{ request.args.get('commentators', '') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="lower_third_title">Lower Third Title</label>
+                <input type="text" name="lower_third_title" id="lower_third_title" class="form-control" value="{{ request.args.get('lower_third_title', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="lower_third_subtitle">Lower Third Subtitle</label>
+                <input type="text" name="lower_third_subtitle" id="lower_third_subtitle" class="form-control" value="{{ request.args.get('lower_third_subtitle', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="officials">Officials</label>
+                <textarea name="officials" id="officials" class="form-control">{{ request.args.get('officials', '') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <h2 class="section-title">Penalties - Home</h2>
+                <label for="penalties_home_player">Player</label>
+                <select name="penalties_home_player" id="penalties_home_player" class="form-control">
+                    {% for player in roster_data[request.args.get('home_team', 'Manchester Storm')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('penalties_home_player') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="penalties_home_type">Penalty Type</label>
+                <select name="penalties_home_type" id="penalties_home_type" class="form-control">
+                    <option value="2 Minutes" {% if request.args.get('penalties_home_type') == "2 Minutes" %}selected{% endif %}>2 Minutes</option>
+                    <option value="2 + 2 Minutes" {% if request.args.get('penalties_home_type') == "2 + 2 Minutes" %}selected{% endif %}>2 + 2 Minutes</option>
+                    <option value="5 Minutes" {% if request.args.get('penalties_home_type') == "5 Minutes" %}selected{% endif %}>5 Minutes</option>
+                    <option value="10 Minutes" {% if request.args.get('penalties_home_type') == "10 Minutes" %}selected{% endif %}>10 Minutes</option>
+                    <option value="20 Minutes" {% if request.args.get('penalties_home_type') == "20 Minutes" %}selected{% endif %}>20 Minutes</option>
+                    <option value="25 Minutes" {% if request.args.get('penalties_home_type') == "25 Minutes" %}selected{% endif %}>25 Minutes</option>
+                </select>
+
+                <label for="penalties_home_reason">Penalty Reason</label>
+                <select name="penalties_home_reason" id="penalties_home_reason" class="form-control">
+                    <option value="Hooking" {% if request.args.get('penalties_home_reason') == "Hooking" %}selected{% endif %}>Hooking</option>
+                    <option value="Tripping" {% if request.args.get('penalties_home_reason') == "Tripping" %}selected{% endif %}>Tripping</option>
+                    <option value="Slashing" {% if request.args.get('penalties_home_reason') == "Slashing" %}selected{% endif %}>Slashing</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <h2 class="section-title">Penalties - Away</h2>
+                <label for="penalties_away_player">Player</label>
+                <select name="penalties_away_player" id="penalties_away_player" class="form-control">
+                    {% for player in roster_data[request.args.get('away_team', 'Belfast Giants')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('penalties_away_player') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="penalties_away_type">Penalty Type</label>
+                <select name="penalties_away_type" id="penalties_away_type" class="form-control">
+                    <option value="2 Minutes" {% if request.args.get('penalties_away_type') == "2 Minutes" %}selected{% endif %}>2 Minutes</option>
+                    <option value="2 + 2 Minutes" {% if request.args.get('penalties_away_type') == "2 + 2 Minutes" %}selected{% endif %}>2 + 2 Minutes</option>
+                    <option value="5 Minutes" {% if request.args.get('penalties_away_type') == "5 Minutes" %}selected{% endif %}>5 Minutes</option>
+                    <option value="10 Minutes" {% if request.args.get('penalties_away_type') == "10 Minutes" %}selected{% endif %}>10 Minutes</option>
+                    <option value="20 Minutes" {% if request.args.get('penalties_away_type') == "20 Minutes" %}selected{% endif %}>20 Minutes</option>
+                    <option value="25 Minutes" {% if request.args.get('penalties_away_type') == "25 Minutes" %}selected{% endif %}>25 Minutes</option>
+                </select>
+
+                <label for="penalties_away_reason">Penalty Reason</label>
+                <select name="penalties_away_reason" id="penalties_away_reason" class="form-control">
+                    <option value="Hooking" {% if request.args.get('penalties_away_reason') == "Hooking" %}selected{% endif %}>Hooking</option>
+                    <option value="Tripping" {% if request.args.get('penalties_away_reason') == "Tripping" %}selected{% endif %}>Tripping</option>
+                    <option value="Slashing" {% if request.args.get('penalties_away_reason') == "Slashing" %}selected{% endif %}>Slashing</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <h2 class="section-title">Score Clock</h2>
+                <label for="home_team">Home Team</label>
+                <select name="home_team" id="home_team" class="form-control">
+                    {% for team in teams %}
+                    <option value="{{ team }}" {% if team == request.args.get('home_team') %}selected{% endif %}>{{ team }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="home_team_colour">Home Team Colour</label>
+                <input type="text" name="home_team_colour" id="home_team_colour" class="form-control" value="{{ request.args.get('home_team_colour', '') }}" readonly>
+
+                <label for="away_team">Away Team</label>
+                <select name="away_team" id="away_team" class="form-control">
+                    {% for team in teams %}
+                    <option value="{{ team }}" {% if team == request.args.get('away_team') %}selected{% endif %}>{{ team }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="away_team_colour">Away Team Colour</label>
+                <input type="text" name="away_team_colour" id="away_team_colour" class="form-control" value="{{ request.args.get('away_team_colour', '') }}" readonly>
+
+                <label for="current_period">Current Period</label>
+                <select name="current_period" id="current_period" class="form-control">
+                    <option value="Face Off" {% if request.args.get('current_period') == "Face Off" %}selected{% endif %}>Face Off</option>
+                    <option value="Period 1" {% if request.args.get('current_period') == "Period 1" %}selected{% endif %}>Period 1</option>
+                    <option value="Period 2" {% if request.args.get('current_period') == "Period 2" %}selected{% endif %}>Period 2</option>
+                    <option value="Period 3" {% if request.args.get('current_period') == "Period 3" %}selected{% endif %}>Period 3</option>
+                    <option value="Overtime" {% if request.args.get('current_period') == "Overtime" %}selected{% endif %}>Overtime</option>
+                    <option value="Shootout" {% if request.args.get('current_period') == "Shootout" %}selected{% endif %}>Shootout</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <h2 class="section-title">Team Lineups</h2>
+                <label for="home_player_1">Home Player 1</label>
+                <select name="home_player_1" id="home_player_1" class="form-control">
+                    {% for player in roster_data[request.args.get('home_team', 'Manchester Storm')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('home_player_1', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="home_player_2">Home Player 2</label>
+                <select name="home_player_2" id="home_player_2" class="form-control">
+                    {% for player in roster_data[request.args.get('home_team', 'Manchester Storm')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('home_player_2', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="home_player_3">Home Player 3</label>
+                <select name="home_player_3" id="home_player_3" class="form-control">
+                    {% for player in roster_data[request.args.get('home_team', 'Manchester Storm')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('home_player_3', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="home_player_4">Home Player 4</label>
+                <select name="home_player_4" id="home_player_4" class="form-control">
+                    {% for player in roster_data[request.args.get('home_team', 'Manchester Storm')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('home_player_4', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="home_player_5">Home Player 5</label>
+                <select name="home_player_5" id="home_player_5" class="form-control">
+                    {% for player in roster_data[request.args.get('home_team', 'Manchester Storm')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('home_player_5', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="away_player_1">Away Player 1</label>
+                <select name="away_player_1" id="away_player_1" class="form-control">
+                    {% for player in roster_data[request.args.get('away_team', 'Belfast Giants')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('away_player_1', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="away_player_2">Away Player 2</label>
+                <select name="away_player_2" id="away_player_2" class="form-control">
+                    {% for player in roster_data[request.args.get('away_team', 'Belfast Giants')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('away_player_2', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="away_player_3">Away Player 3</label>
+                <select name="away_player_3" id="away_player_3" class="form-control">
+                    {% for player in roster_data[request.args.get('away_team', 'Belfast Giants')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('away_player_3', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="away_player_4">Away Player 4</label>
+                <select name="away_player_4" id="away_player_4" class="form-control">
+                    {% for player in roster_data[request.args.get('away_team', 'Belfast Giants')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('away_player_4', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="away_player_5">Away Player 5</label>
+                <select name="away_player_5" id="away_player_5" class="form-control">
+                    {% for player in roster_data[request.args.get('away_team', 'Belfast Giants')] %}
+                    <option value="#{{ player['number'] }} {{ player['name'] }}" {% if "#{{ player['number'] }} {{ player['name'] }}" == request.args.get('away_player_5', '') %}selected{% endif %}>
+                        #{{ player['number'] }} {{ player['name'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="home_coach">Home Coach</label>
+                <select name="home_coach" id="home_coach" class="form-control">
+                    <option value="{{ request.args.get('home_coach', '') }}" selected>{{ request.args.get('home_coach', '') }}</option>
+                </select>
+
+                <label for="away_coach">Away Coach</label>
+                <select name="away_coach" id="away_coach" class="form-control">
+                    <option value="{{ request.args.get('away_coach', '') }}" selected>{{ request.args.get('away_coach', '') }}</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const rosterData = {{ roster_data | tojson }};
+        const teamColors = {
+            'Manchester Storm': '#FFD700',
+            'Sheffield Steelers': '#FF8C00',
+            // Add more team colors as needed
+        };
+
+        // Event listener for Home Team selection
+        document.getElementById('home_team').addEventListener('change', function() {
+            const selectedTeam = this.value;
+            document.getElementById('home_team_colour').value = teamColors[selectedTeam];
+
+            // Update home team players and coach
+            updatePlayers('home_player_', rosterData[selectedTeam]);
+            updateCoach('home_coach', rosterData[selectedTeam]);
+        });
+
+        // Event listener for Away Team selection
+        document.getElementById('away_team').addEventListener('change', function() {
+            const selectedTeam = this.value;
+            document.getElementById('away_team_colour').value = teamColors[selectedTeam];
+
+            // Update away team players and coach
+            updatePlayers('away_player_', rosterData[selectedTeam]);
+            updatePlayers('penalties_away_player', rosterData[selectedTeam]);
+            updateCoach('away_coach', rosterData[selectedTeam]);
+        });
+
+        // Function to update player dropdowns based on selected team
+        function updatePlayers(playerPrefix, players) {
+            for (let i = 1; i <= 5; i++) {
+                const playerSelect = document.getElementById(`${playerPrefix}${i}`);
+                if (playerSelect) {
+                    playerSelect.innerHTML = '';  // Clear existing options
+                    players.forEach(player => {
+                        const option = document.createElement('option');
+                        option.value = `#${player.number} ${player.name}`;
+                        option.textContent = `#${player.number} ${player.name}`;
+                        playerSelect.appendChild(option);
+                    });
+                }
+            }
+            // For penalties dropdowns
+            if (document.getElementById(playerPrefix)) {
+                const playerSelect = document.getElementById(playerPrefix);
+                playerSelect.innerHTML = '';  // Clear existing options
+                players.forEach(player => {
+                    const option = document.createElement('option');
+                    option.value = `#${player.number} ${player.name}`;
+                    option.textContent = `#${player.number} ${player.name}`;
+                    playerSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Function to update the coach dropdown based on selected team
+        function updateCoach(coachId, players) {
+            const coachSelect = document.getElementById(coachId);
+            coachSelect.innerHTML = '';  // Clear existing options
+            players.forEach(player => {
+                if (player.position === "Head Coach") {
+                    const option = document.createElement('option');
+                    option.value = player.name;
+                    option.textContent = player.name;
+                    coachSelect.appendChild(option);
+                }
+            });
+        }
+
+        // Toggle Dark Mode
+        function toggleDarkMode() {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            document.querySelector('.navbar').classList.toggle('navbar-dark-mode');
+            document.querySelector('.navbar').classList.toggle('navbar-light-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.navbar').classList.add('navbar-dark-mode');
+                document.querySelector('.navbar').classList.remove('navbar-light-mode');
+                document.getElementById('darkModeToggle').checked = true;
+            }
+            document.getElementById('darkModeToggle').addEventListener('change', toggleDarkMode);
+        });
+
+        // Update Clock
+        function updateClock() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('datetime').innerText = now.toLocaleDateString('en-US', options).replace(' at ', ' - ');
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+</body>
+</html>

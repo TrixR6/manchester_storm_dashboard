@@ -20,7 +20,8 @@
         {"number": 37, "name": "Grant Hebert", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 70, "name": "Joe Morrow", "position": "Defense", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 77, "name": "Owen Griffiths", "position": "Forward", "nationality": "Welsh", "shot_catch": "Left"},
-        {"number": 92, "name": "Ryan Hughes", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"}
+        {"number": 92, "name": "Ryan Hughes", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": "", "name": "Mike Flanagan", "position": "Head Coach", "nationality": "Canadian", "shot_catch": ""}
         
     ],
     "Belfast Giants": [
@@ -76,7 +77,7 @@
         {"number": 89, "name": "Hunter Shinkaruk", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 92, "name": "Josh MacDonald", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": "", "name": "Peter Russell", "position": "Head Coach", "nationality": "Scottish", "shot_catch": "N/A"},
-        {"number": "", "name": "Assistant Coach", "position": "Matthew Myers", "nationality": "Welsh", "shot_catch": "N/A"}
+        {"number": "", "name": "Matthew Myers", "position": "Assistant Coach", "nationality": "Welsh", "shot_catch": "N/A"}
     ],
     "Coventry Blaze": [
         {"number": 20, "name": "Mat Robson", "position": "Goaltender", "nationality": "Canadian", "shot_catch": "Left"},
@@ -226,8 +227,6 @@
         {"number": 0, "name": "Curtis Warburton", "position": "Goaltender", "nationality": "British", "shot_catch": "Right"},
         {"number": 1, "name": "Matthew Greenfield", "position": "Goaltender", "nationality": "USA", "shot_catch": "Left"},
         {"number": 0, "name": "Angelo Miceli", "position": "Forward", "nationality": "Italian Canadian", "shot_catch": "Left"},
-        {"number": 0, "name": "Mitchell Balmas", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
-        {"number": 0, "name": "Patrick Watling", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 0, "name": "Ivan Björkly Nordström", "position": "Forward", "nationality": "Swedish and Scottish", "shot_catch": "Right"},
         {"number": 0, "name": "Marc-Olivier Vallerand", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 0, "name": "Tate Shudra", "position": "Forward", "nationality": "British", "shot_catch": "Left"},
@@ -236,6 +235,7 @@
         {"number": 0, "name": "Finlay Ulrick", "position": "Two-Way", "nationality": "British", "shot_catch": "Right"},
         {"number": 6, "name": "Kevin Tansey", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 12, "name": "Daniel Ciampini", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 14, "name": "Patrick Watling", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 23, "name": "Colton Saucerman", "position": "Defence", "nationality": "USA", "shot_catch": "Right"},
         {"number": 24, "name": "Mark Simpson", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 27, "name": "Cole Shudra", "position": "Two-Way", "nationality": "British", "shot_catch": "Left"},
@@ -244,20 +244,38 @@
         {"number": 65, "name": "Brien Diffley", "position": "Defence", "nationality": "USA", "shot_catch": "Right"},
         {"number": 74, "name": "Brandon Whistle", "position": "Forward", "nationality": "British Canadian", "shot_catch": "Right"},
         {"number": 75, "name": "Robert Dowd", "position": "Forward", "nationality": "British", "shot_catch": "Right"},
+        {"number": 92, "name": "Mitchell Balmas", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": "", "name": "Aaron Fox", "position": "Head Coach", "nationality": "USA", "shot_catch": ""},
         {"number": "", "name": "Carter Beston-Will", "position": "Associate Coach", "nationality": "Canadian", "shot_catch": ""}
     ],
-    "Université du Québec à Trois-Rivières Patriotes": [
-        {"number": 0, "name": "Christoph Rondeau", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
-        {"number": 0, "name": "Anthony Turcotte", "position": "Forward", "nationality": "Canadian", "shot_catch": "Right"},
-        {"number": 0, "name": "Tristan Roy", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
-        {"number": 0, "name": "Olivier Boutin", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
-        {"number": 0, "name": "Charles-Antoine Pilote", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
-        {"number": 0, "name": "Zachaël Turgeon", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"},
-        {"number": 0, "name": "Félix Larose", "position": "Defence", "nationality": "Canadian", "shot_catch": "Right"},
-        {"number": 0, "name": "Mathis Cloutier", "position": "Forward", "nationality": "Canadian", "shot_catch": "Left"}
+    "UQTR Patriotes": [
+        {"number": 29, "name": "William Grimard", "position": "Goaltender", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 31, "name": "Charles-Antoine Lavallee", "position": "Goaltender", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 80, "name": "Jonathan Brisson", "position": "Goaltender", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 2, "name": "Charles-Antoine Pilote", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 3, "name": "Olivier Boutin", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 5, "name": "Félix Larose", "position": "Defence", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 9, "name": "Zachaël Turgeon", "position": "Forward (RW)", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 12, "name": "Pier-Olivier Roy", "position": "Forward (RW)", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 15, "name": "Loris Rafanomezantsoa", "position": "Defence", "nationality": "French Canadian", "shot_catch": "Left"},
+        {"number": 16, "name": "Mathis Cloutier", "position": "Forward (LW)", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 17, "name": "Jeremy Martin", "position": "Forward (RW)", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 19, "name": "Zachary Gravel", "position": "Forward (RW)", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 20, "name": "Anthony Turcotte", "position": "Forward (CEN)", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 21, "name": "Kaylen Gauthier", "position": "Defence", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 22, "name": "Christophe Rondeau", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 27, "name": "Anthony Munroe-Boucher", "position": "Forward (LW)", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 49, "name": "Édouard Cournoyer", "position": "Defence", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 61, "name": "Conor Frenette", "position": "Forward (CEN)", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 67, "name": "Ludovic Soucy", "position": "Forward (CEN)", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 71, "name": "Felix Lafrance", "position": "Forward (LW)", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 74, "name": "Mavrick Gauthier", "position": "Defence", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 79, "name": "Charles Beaudoin", "position": "Forward (LW)", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 86, "name": "Vincent Milot-Ouellet", "position": "Forward (LW)", "nationality": "Canadian", "shot_catch": "Right"},
+        {"number": 89, "name": "Tristan Roy", "position": "Forward (CEN)", "nationality": "Canadian", "shot_catch": "Left"},
+        {"number": 90, "name": "William Dumoulin", "position": "Forward (LW)", "nationality": "Canadian", "shot_catch": "Right"}
         ],
-    "Lausitzer Füchse": [
+    "Lausitzer Fuchse": [
         {"number": 0, "name": "Anthony Morrone", "position": "Goaltender", "nationality": "Canadian", "shot_catch": "Left"},
         {"number": 50, "name": "Leon Jessler", "position": "Goaltender", "nationality": "German", "shot_catch": "Left"},
         {"number": 96, "name": "Daniel Filimonow", "position": "Goaltender", "nationality": "German Russian", "shot_catch": "Left"},

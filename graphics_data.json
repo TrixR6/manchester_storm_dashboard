@@ -1,0 +1,358 @@
+{
+    "commentators": "test4",
+    "lower_third_title": "test5",
+    "lower_third_subtitle": "test6",
+    "officials": "test7",
+    "penalties_home": {
+        "player": "Alex Oldale",
+        "type": "2 Minutes",
+        "reason": "Tripping"
+    },
+    "penalties_away": {
+        "player": "Ben Norton",
+        "type": "2 Minutes",
+        "reason": "Hooking"
+    },
+    "score_clock": {
+        "home_team": "Manchester Storm",
+        "home_team_colour": "#FFD700",
+        "away_team": "Sheffield Steelers",
+        "away_team_colour": "#FF8C00",
+        "current_period": "Face Off"
+    },
+    "period_breaks": {
+        "home_team": "Manchester Storm",
+        "away_team": "Sheffield Steelers",
+        "home_team_colour": "#FFD700",
+        "away_team_colour": "#FF8C00",
+        "current_period_break": null
+    },
+    "team_lineups": {
+        "Manchester Storm": [
+            {
+                "number": 32,
+                "name": "Alex Oldale",
+                "position": "Goaltender",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 34,
+                "name": "Lewis McBride",
+                "position": "Goaltender",
+                "nationality": "British",
+                "shot_catch": "Unknown"
+            },
+            {
+                "number": 35,
+                "name": "Evan Weninger",
+                "position": "Goaltender",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 6,
+                "name": "Chase Harrison",
+                "position": "Defence",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 7,
+                "name": "Connor Lee",
+                "position": "Forward",
+                "nationality": "British",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 9,
+                "name": "Tyler Hinam",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 10,
+                "name": "Dallas Ehrhardt",
+                "position": "Defence",
+                "nationality": "British Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 11,
+                "name": "Cam Critchlow [C]",
+                "position": "Forward",
+                "nationality": "British Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 12,
+                "name": "Stephen Johnson",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 14,
+                "name": "Loren Ulett",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 17,
+                "name": "Josh Crawley",
+                "position": "Forward",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 19,
+                "name": "Gianluca Esteves",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 21,
+                "name": "Zach Sullivan",
+                "position": "Defence",
+                "nationality": "British",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 23,
+                "name": "Johnny Corneil",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 24,
+                "name": "Zack Milton",
+                "position": "Forward",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 26,
+                "name": "Noah Carrol",
+                "position": "Defense",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 27,
+                "name": "C.J. Garcia",
+                "position": "Defence",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 37,
+                "name": "Grant Hebert",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 70,
+                "name": "Joe Morrow",
+                "position": "Defense",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 77,
+                "name": "Owen Griffiths",
+                "position": "Forward",
+                "nationality": "Welsh",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 92,
+                "name": "Ryan Hughes",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            }
+        ],
+        "Sheffield Steelers": [
+            {
+                "number": 0,
+                "name": "Ben Norton",
+                "position": "Goaltender",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Curtis Warburton",
+                "position": "Goaltender",
+                "nationality": "British",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 1,
+                "name": "Matthew Greenfield",
+                "position": "Goaltender",
+                "nationality": "USA",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Angelo Miceli",
+                "position": "Forward",
+                "nationality": "Italian Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Mitchell Balmas",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Patrick Watling",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Ivan Bj\u00c3\u00b6rkly Nordstr\u00c3\u00b6m",
+                "position": "Forward",
+                "nationality": "Swedish and Scottish",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 0,
+                "name": "Marc-Olivier Vallerand",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Tate Shudra",
+                "position": "Forward",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Morgan Clarke-Pizzo",
+                "position": "Forward",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Nathan Ripley",
+                "position": "Forward",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 0,
+                "name": "Finlay Ulrick",
+                "position": "Two-Way",
+                "nationality": "British",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 6,
+                "name": "Kevin Tansey",
+                "position": "Defence",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 12,
+                "name": "Daniel Ciampini",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 23,
+                "name": "Colton Saucerman",
+                "position": "Defence",
+                "nationality": "USA",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 24,
+                "name": "Mark Simpson",
+                "position": "Forward",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 27,
+                "name": "Cole Shudra",
+                "position": "Two-Way",
+                "nationality": "British",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 58,
+                "name": "Dominic Cormier",
+                "position": "Defence",
+                "nationality": "Canadian",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 63,
+                "name": "Mikko Juusola",
+                "position": "Forward",
+                "nationality": "Finnnish",
+                "shot_catch": "Left"
+            },
+            {
+                "number": 65,
+                "name": "Brien Diffley",
+                "position": "Defence",
+                "nationality": "USA",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 74,
+                "name": "Brandon Whistle",
+                "position": "Forward",
+                "nationality": "British Canadian",
+                "shot_catch": "Right"
+            },
+            {
+                "number": 75,
+                "name": "Robert Dowd",
+                "position": "Forward",
+                "nationality": "British",
+                "shot_catch": "Right"
+            },
+            {
+                "number": "",
+                "name": "Carter Beston-Will",
+                "position": "Associate Coach",
+                "nationality": "Canadian",
+                "shot_catch": ""
+            }
+        ],
+        "home_coach": {
+            "number": "",
+            "name": "Mike Flanagan",
+            "position": "Head Coach",
+            "nationality": "Canadian",
+            "shot_catch": ""
+        },
+        "away_coach": {
+            "number": "",
+            "name": "Aaron Fox",
+            "position": "Head Coach",
+            "nationality": "USA",
+            "shot_catch": ""
+        }
+    }
+}
