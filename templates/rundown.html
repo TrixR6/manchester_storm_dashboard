@@ -6,6 +6,7 @@
     <title>Rundown View</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body class="light-mode">
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -89,11 +90,20 @@
                     <td><span class="static">{{ segment.talent }}</span><input type="text" class="form-control editable" value="{{ segment.talent }}" name="talent"></td>
                     <td><span class="static">{{ segment.color_name }}</span><input type="text" class="form-control editable" value="{{ segment.color_name }}" name="color_name"></td>
                     <td>
-                        <button class="btn btn-primary btn-action edit-btn" onclick="editSegment(this)">Edit</button>
-                        <button class="btn btn-success btn-action save-btn editable" onclick="saveSegment(this)" style="display:none;">Save</button>
-                        <button class="btn btn-danger btn-action" onclick="deleteSegment({{ segment.number }})">Delete</button>
-                        <button class="btn btn-secondary btn-action" onclick="setCurrentSegment({{ segment.number }})"
-                            {% if segment.number == state.current_segment %} disabled {% endif %}>Set Current</button>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="btn btn-action edit-btn" onclick="editSegment(this)" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-action save-btn editable" onclick="saveSegment(this)" title="Save" style="display:none;">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button class="btn btn-action" onclick="deleteSegment({{ segment.number }})" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="btn btn-action" onclick="setCurrentSegment({{ segment.number }})" title="Set Current" {% if segment.number == state.current_segment %} disabled {% endif %}>
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
